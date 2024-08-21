@@ -14,7 +14,6 @@ The healthcare chatbot leverages LangChain, a framework for integrating retrieva
 
 ## Structure
 
-- **/src**: Source code for the healthcare chatbot application.
 - **/data**: Sample data and resources, including PDF files used for demonstration.
 
 ## Getting Started
@@ -30,7 +29,6 @@ The healthcare chatbot leverages LangChain, a framework for integrating retrieva
 2. **Run the Chatbot**: Navigate to the `/src` directory and execute the Streamlit application.
 
    ```bash
-   cd src
    streamlit run app.py
    ```
 
