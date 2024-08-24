@@ -53,7 +53,7 @@ def initialize_models_and_store(document_chunks: list):
     Returns:
         tuple: Language model and vector retriever.
     """
-    groq_api_key = st.secrets('GROQ_API_KEY')
+    groq_api_key = st.secrets['GROQ_API_KEY']
     if not groq_api_key:
         raise ValueError("GROQ API key not found.")
     
