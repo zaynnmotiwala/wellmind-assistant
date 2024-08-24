@@ -4,9 +4,7 @@ import streamlit as st
 from dotenv import load_dotenv
 
 from langchain_groq import ChatGroq
-from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
-from langchain_chroma import Chroma
 
 from langchain.chains import create_history_aware_retriever, create_retrieval_chain
 from langchain_core.prompts import ChatPromptTemplate
