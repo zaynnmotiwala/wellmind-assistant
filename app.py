@@ -16,10 +16,10 @@ from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_core.messages import HumanMessage
 
 os.environ["LANGCHAIN_TRACING_V2"] = "true"
-os.environ["LANGCHAIN_PROJECT"]="Mental HealthCare Chatbot"
+os.environ["LANGCHAIN_PROJECT"]="Mental HealthCare Chatbot v0.1.0"
 
 # Load environment variables
-load_dotenv()
+load_dotenv(override=True)
 
 
 def load_and_split_documents(chunk_size: int = 500, chunk_overlap: int = 50):
@@ -53,7 +53,7 @@ def initialize_models_and_store(document_chunks: list):
     Returns:
         tuple: Language model and vector retriever.
     """
-    groq_api_key = st.secrets('GROQ_API_KEY')
+    groq_api_key = st.secrets['GROQ_API_KEY']
     if not groq_api_key:
         raise ValueError("GROQ API key not found.")
     
@@ -179,7 +179,7 @@ def display_chat_interface(conversation_chain: create_retrieval_chain):
     Args:
         conversational_rag_chain (create_retrieval_chain): The conversational retrieval chain.
     """
-    st.title("Healthcare Chatbot")
+    st.title("Mental Healthcare Chatbot")
 
     # Display chat messages from history on app rerun
     for message in st.session_state.messages:
