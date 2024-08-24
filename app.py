@@ -15,7 +15,7 @@ from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain_core.messages import HumanMessage
 
 os.environ["LANGCHAIN_TRACING_V2"] = "true"
-os.environ["LANGCHAIN_PROJECT"]="HealthCare Chatbot"
+os.environ["LANGCHAIN_PROJECT"]="Mental HealthCare Chatbot"
 
 # Load environment variables
 load_dotenv(override=True)
