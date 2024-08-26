@@ -44,31 +44,7 @@ def load_faiss_vector_store(vectorstore_filename: str = "faiss_vectorstore.pkl")
     except Exception as e:
         raise e
 
-def initialize_models_and_store(document_chunks: list):
-    """
-    Initialize the language model and vector store.
-
-    Args:
-        document_chunks (list): List of document chunks.
-
-    Returns:
-        tuple: Language model and vector retriever.
-    """
-    groq_api_key = st.secrets['GROQ_API_KEY']
-    if not groq_api_key:
-        raise ValueError("GROQ API key not found.")
-    
-    groq_model_name = "Llama3-8b-8192"
-    language_model = ChatGroq(groq_api_key=groq_api_key, model_name=groq_model_name)
-
-    embedding_model_name = "sentence-transformers/all-MiniLM-L6-v2"
-    embeddings_model = HuggingFaceEmbeddings(model_name=embedding_model_name, model_kwargs={'device': "cpu"})
-    vector_database = FAISS.from_documents(document_chunks, embeddings_model)
-    retriever=vector_database.as_retriever()
-
-    return language_model, retriever
-
-def create_conversational_chain(language_model: ChatGroq, retriever: FAISS):
+def create_conversational_chain(retriever: FAISS):
     """
     Create the conversational retrieval chain.
 
@@ -79,6 +55,13 @@ def create_conversational_chain(language_model: ChatGroq, retriever: FAISS):
     Returns:
         create_retrieval_chain: The conversational retrieval chain.
     """
+
+    groq_api_key = os.getenv('GROQ_API_KEY')
+    if not groq_api_key:
+        raise ValueError("GROQ API key not found.")
+    
+    groq_model_name = "Llama3-8b-8192"
+    language_model = ChatGroq(groq_api_key=groq_api_key, model_name=groq_model_name)
 
     contextualize_q_system_prompt = "Given a chat history and the latest user question \
     which might reference context in the chat history, formulate a standalone question \
@@ -181,9 +164,8 @@ def main():
     """
     Main function to run the Streamlit application.
     """
-    document_chunks = load_faiss_vector_store()
-    language_model, vector_database = initialize_models_and_store(document_chunks)
-    conversation_chain = create_conversational_chain(language_model, vector_database)
+    retriever = load_faiss_vector_store()
+    conversation_chain = create_conversational_chain(retriever)
 
     initialize_session_state()
     display_chat_interface(conversation_chain)
