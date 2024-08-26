@@ -1,11 +1,13 @@
 import os
+import pickle
 import streamlit as st
 from dotenv import load_dotenv
+
 from langchain_community.document_loaders import PyPDFLoader, DirectoryLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_groq import ChatGroq
-from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_community.vectorstores import FAISS
+
 from langchain.chains import create_history_aware_retriever, create_retrieval_chain
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.prompts import MessagesPlaceholder
@@ -21,27 +23,26 @@ os.environ["LANGCHAIN_PROJECT"]="Mental HealthCare Chatbot v0.1.0"
 # Load environment variables
 load_dotenv(override=True)
 
-
-def load_and_split_documents(chunk_size: int = 500, chunk_overlap: int = 50):
+def load_faiss_vector_store(vectorstore_filename: str = "faiss_vectorstore.pkl"):
     """
-    Load PDF documents from a directory and split them into chunks.
+    Load FAISS vector store.
 
     Args:
-        chunk_size (int): Size of each chunk.
-        chunk_overlap (int): Overlap between chunks.
-
+        db_directory_path (str): path to FAISS database.
     Returns:
-        list: List of document chunks.
+        FAISS vector store
     """
-    directory_path = "data"
+    try:
+
+        with open(vectorstore_filename, "rb") as f:
+            vector_store = pickle.load(f)
+
+        retriever=vector_store.as_retriever()
+
+        return retriever
     
-    pdf_loader = DirectoryLoader(directory_path, glob="*.pdf", loader_cls=PyPDFLoader)
-    pdf_documents = pdf_loader.load()
-
-    chunk_splitter = RecursiveCharacterTextSplitter(chunk_size=chunk_size, chunk_overlap=chunk_overlap)
-    document_chunks = chunk_splitter.split_documents(pdf_documents)
-
-    return document_chunks
+    except Exception as e:
+        raise e
 
 def initialize_models_and_store(document_chunks: list):
     """
@@ -180,7 +181,7 @@ def main():
     """
     Main function to run the Streamlit application.
     """
-    document_chunks = load_and_split_documents()
+    document_chunks = load_faiss_vector_store()
     language_model, vector_database = initialize_models_and_store(document_chunks)
     conversation_chain = create_conversational_chain(language_model, vector_database)
 
