@@ -9,11 +9,6 @@
 ![Groq](https://img.shields.io/badge/LLM-Groq-F55036)
 
 ---
-
-> **⚠️ Disclaimer:** WellMind Assistant is an educational project. It is **not** a medical device and does **not** replace professional diagnosis, treatment, or therapy. If you or someone you know is in crisis, contact your local emergency number or a crisis helpline right away (for example, **988** in the US).
-
----
-
 ## Overview
 
 WellMind Assistant answers questions about mental health topics such as anxiety, depression, ADHD, PTSD, bipolar disorder, eating disorders, and suicide prevention. Its answers are grounded in a curated set of public-domain publications from the **National Institute of Mental Health (NIMH)**.
